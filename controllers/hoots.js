@@ -10,7 +10,8 @@ router.use(verifyToken)
 // POST /hoots
 router.post('/', async (req, res) => {
   try {
-    req.body.author = req.user.id
+    req.body.author = req.user._id
+    console.log(req.user.id)
     const hoot = await Hoot.create(req.body)
     hoot._doc.author = req.user
     res.status(201).json(hoot)
@@ -52,7 +53,7 @@ router.put('/:hootId', async (req, res) => {
       return res.status(403).send("You're not allowed to do that!")
     }
     // Update hoot
-    const updatedHoot = await Hoot.findByIdAndUpdate(req.params.hootId, req.body, {new: true} )
+    const updatedHoot = await Hoot.findByIdAndUpdate(req.params.hootId, req.body, { new: true })
 
     // Append req.user to the author property
     updatedHoot._doc.author = req.user
@@ -84,10 +85,11 @@ router.delete('/:hootId', async (req, res) => {
 router.post('/:hootId/comments', async (req, res) => {
   try {
     req.body.author = req.user._id
-    const hoot = await Hoot.fiindById(req.params.hootId)
-    hoot.comment.push(req.body)
+    const hoot = await Hoot.findById(req.params.hootId)
+    console.log(hoot)
+    hoot.comments.push(req.body)
     await hoot.save()
-// Find the newly created comment 
+    // Find the newly created comment 
     const newComment = hoot.comments[hoot.comments.length - 1]
     newComment._doc.author = req.user
 
