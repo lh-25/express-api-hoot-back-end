@@ -32,6 +32,20 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /hoots/my-hoot hoot by author
+
+router.get('my-hoots', async (req,res) => {
+  try {
+    const hoots = await Hoot.find({author: req.user._id})
+    .populate('author')
+    .sort({ createdAt: 'desc' });
+    res.status(200).json(hoots)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
+
 // GET /hoots/:hootId
 
 router.get('/:hootId', async (req, res) => {
