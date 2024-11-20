@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
 
 // GET /hoots/my-hoot hoot by author
 
-router.get('my-hoots', async (req,res) => {
+router.get('/my-hoots', async (req,res) => {
   try {
     const hoots = await Hoot.find({author: req.user._id})
     .populate('author')
